@@ -19,6 +19,9 @@ public class Course extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private Long capacity;
 
     @Column(nullable = false, precision = 15, scale = 2)
