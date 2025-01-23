@@ -28,7 +28,7 @@ class MemberServiceTest extends ServiceSliceTest {
     @Test
     void createMember() {
         // given
-        SignUpRequest signUpRequest = SignUpRequestFixture.create();
+        SignUpRequest signUpRequest = SignUpRequestFixture.createStudent();
 
         //when
         SignUpResponse signUpResponse = memberService.createMember(signUpRequest);
@@ -46,7 +46,7 @@ class MemberServiceTest extends ServiceSliceTest {
         // given
         Email email = new Email("user@email.com");
         PhoneNumber phoneNumber = new PhoneNumber("01087654321");
-        memberRepository.save(MemberFixture.create(email, phoneNumber));
+        memberRepository.save(MemberFixture.createTeacher(email, phoneNumber));
         SignUpRequest signUpRequest = SignUpRequestFixture.createWithEmail(email.getEmail());
 
         //when
@@ -61,7 +61,7 @@ class MemberServiceTest extends ServiceSliceTest {
         // given
         Email email = new Email("other@email.com");
         PhoneNumber phoneNumber = new PhoneNumber("01012345678");
-        memberRepository.save(MemberFixture.create(email, phoneNumber));
+        memberRepository.save(MemberFixture.createTeacher(email, phoneNumber));
         SignUpRequest signUpRequest = SignUpRequestFixture.createWithPhoneNumber(phoneNumber.getPhoneNumber());
 
         //when
