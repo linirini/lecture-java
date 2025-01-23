@@ -26,6 +26,10 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false)
     @Embedded
+    private Email email;
+
+    @Column(nullable = false)
+    @Embedded
     private PhoneNumber phoneNumber;
 
     @Column(nullable = false, length = 10)
