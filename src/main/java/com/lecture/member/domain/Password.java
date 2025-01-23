@@ -2,6 +2,7 @@ package com.lecture.member.domain;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import com.lecture.exception.LectureException;
 import lombok.AccessLevel;
@@ -20,6 +21,7 @@ public class Password {
     private static final String PASSWORD_REGEX = "^(?=(.*[a-z])(?=.*[A-Z])|(?=.*[a-z])(?=.*\\d)|(?=.*[A-Z])(?=.*\\d)).*$";
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
 
+    @Column(length = MAX_LENGTH)
     private String password;
 
     public Password(String password) {
