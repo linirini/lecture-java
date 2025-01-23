@@ -1,6 +1,5 @@
 package com.lecture.member;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +12,6 @@ import static org.hamcrest.Matchers.is;
 
 class MemberIntegrationTest extends IntegrationTest {
 
-    @Disabled
     @DisplayName("사용자가 회원가입을 한다.")
     @Test
     void signUp() {
@@ -27,7 +25,7 @@ class MemberIntegrationTest extends IntegrationTest {
                     "role": "student"
                 }
                 """;
-        long expectedId = 1;
+        int expectedId = 1;
 
         // when & then
         RestAssured.given().log().all()
@@ -35,7 +33,7 @@ class MemberIntegrationTest extends IntegrationTest {
                 .body(signUpRequest)
                 .when().post("/members")
                 .then().log().all()
-                .assertThat().statusCode(HttpStatus.OK.value())
+                .assertThat().statusCode(HttpStatus.CREATED.value())
                 .header(HttpHeaders.LOCATION, "/members/" + expectedId)
                 .body("id", is(expectedId));
     }
