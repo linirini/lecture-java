@@ -4,12 +4,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.lecture.ServiceSliceTest;
+import com.lecture.exception.LectureException;
+import com.lecture.fixture.MemberFixture;
 import com.lecture.fixture.SignUpRequestFixture;
+import com.lecture.member.domain.Email;
 import com.lecture.member.repository.MemberRepository;
 import com.lecture.member.service.dto.SignUpRequest;
 import com.lecture.member.service.dto.SignUpResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MemberServiceTest extends ServiceSliceTest {
@@ -33,5 +37,19 @@ class MemberServiceTest extends ServiceSliceTest {
                 () -> assertThat(memberRepository.findAll()).hasSize(1),
                 () -> assertThat(memberRepository.findById(signUpResponse.id())).isPresent()
         );
+    }
+
+    @DisplayName("이미 존재하는 이메일로 회원을 생성할 수 없다.")
+    @Test
+    void cannotCreateMemberByDuplicatedEmail() {
+        // given
+        Email email = new Email("user@email.com");
+        memberRepository.save(MemberFixture.create(email));
+        SignUpRequest signUpRequest = SignUpRequestFixture.createWithEmail(email.getEmail());
+
+        //when
+        assertThatThrownBy(() -> memberService.createMember(signUpRequest))
+                .isInstanceOf(LectureException.class)
+                .hasMessage("이미 존재하는 이메일입니다. 다시 설정해주세요.");
     }
 }
