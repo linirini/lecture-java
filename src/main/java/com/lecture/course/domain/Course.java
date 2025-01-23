@@ -1,6 +1,5 @@
 package com.lecture.course.domain;
 
-import java.math.BigDecimal;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -27,6 +26,7 @@ public class Course extends BaseEntity {
     @Embedded
     private Capacity capacity;
 
-    @Column(nullable = false, precision = 15, scale = 2)
-    private BigDecimal price;
+    @Column(nullable = false)
+    @Embedded
+    private Price price;
 }
