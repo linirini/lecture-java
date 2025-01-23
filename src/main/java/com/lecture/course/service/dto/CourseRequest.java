@@ -19,7 +19,7 @@ public record CourseRequest(
         Long price
 ) {
 
-    public Course toCourse(Member member){
-        return new Course(title,capacity,price, member);
+    public Course toCourse(Member member) {
+        return new Course(title, capacity, price, member);
     }
 }

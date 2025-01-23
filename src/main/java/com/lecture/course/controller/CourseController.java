@@ -17,13 +17,13 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/courses")
 @RequiredArgsConstructor
-public class CourseController implements CourseControllerDocs{
+public class CourseController implements CourseControllerDocs {
 
     private final CourseService courseService;
 
     @PostMapping
-    public ResponseEntity<CourseIdResponse> createCourse(@RequestBody @Valid CourseRequest courseRequest, @LoginMember Member member){
+    public ResponseEntity<CourseIdResponse> createCourse(@RequestBody @Valid CourseRequest courseRequest, @LoginMember Member member) {
         CourseIdResponse courseIdResponse = courseService.createCourse(courseRequest, member);
-        return ResponseEntity.created(URI.create("/courses/"+courseIdResponse.id())).body(courseIdResponse);
+        return ResponseEntity.created(URI.create("/courses/" + courseIdResponse.id())).body(courseIdResponse);
     }
 }

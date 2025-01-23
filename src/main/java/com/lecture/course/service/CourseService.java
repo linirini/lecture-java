@@ -33,7 +33,7 @@ public class CourseService {
     }
 
     private void validateDuplicated(Course course) {
-        if(courseRepository.existsByMemberAndTitle(course.getMember(), course.getTitle())){
+        if (courseRepository.existsByMemberAndTitle(course.getMember(), course.getTitle())) {
             throw new LectureException(DUPLICATED_TITLE_MESSAGE);
         }
     }

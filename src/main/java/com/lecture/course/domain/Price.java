@@ -25,7 +25,7 @@ public class Price {
     }
 
     private void validate(long price) {
-        if(price<MIN_PRICE){
+        if (price < MIN_PRICE) {
             throw new LectureException(INVALID_PRICE_MESSAGE);
         }
     }

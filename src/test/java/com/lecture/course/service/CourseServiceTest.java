@@ -78,8 +78,8 @@ class CourseServiceTest extends ServiceSliceTest {
     @Test
     void createCourseIfOtherTeacherTitleDuplicated() {
         // given
-        Member member = memberRepository.save(MemberFixture.createTeacher(new Email("member@email.com"),new PhoneNumber("01012345678")));
-        Member other = memberRepository.save(MemberFixture.createTeacher(new Email("other@email.com"),new PhoneNumber("01087654321")));
+        Member member = memberRepository.save(MemberFixture.createTeacher(new Email("member@email.com"), new PhoneNumber("01012345678")));
+        Member other = memberRepository.save(MemberFixture.createTeacher(new Email("other@email.com"), new PhoneNumber("01087654321")));
         CourseRequest courseRequest = CourseRequestFixture.create();
         courseService.createCourse(courseRequest, other);
 

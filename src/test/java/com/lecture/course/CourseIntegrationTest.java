@@ -18,6 +18,14 @@ import static org.hamcrest.Matchers.is;
 
 public class CourseIntegrationTest extends IntegrationTest {
 
+    private static int signUp(SignUpRequest Teacher) {
+        return (int) RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(Teacher)
+                .when().post("/members")
+                .then().extract().body().jsonPath().get("id");
+    }
+
     @DisplayName("회원가입한 강사가 강좌를 등록한다.")
     @TestFactory
     Stream<DynamicTest> registerCourse() {
@@ -119,14 +127,6 @@ public class CourseIntegrationTest extends IntegrationTest {
                             .body("message", is("이미 같은 이름의 강좌를 등록했어요. 다시 설정해주세요."));
                 })
         );
-    }
-
-    private static int signUp(SignUpRequest Teacher) {
-        return (int) RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(Teacher)
-                .when().post("/members")
-                .then().extract().body().jsonPath().get("id");
     }
 
     @DisplayName("인증되지 않은 사용자는 강좌를 등록할 수 없다.")
