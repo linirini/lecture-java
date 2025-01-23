@@ -1,6 +1,7 @@
 package com.lecture.member.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,7 +21,8 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Column(nullable = false, length = 10)
-    private String name;
+    @Embedded
+    private Name name;
 
     @Column(nullable = false)
     private String phoneNumber;
