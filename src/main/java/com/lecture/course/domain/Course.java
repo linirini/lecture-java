@@ -12,9 +12,11 @@ import jakarta.persistence.ManyToOne;
 import com.lecture.config.domain.BaseEntity;
 import com.lecture.member.domain.Member;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Course extends BaseEntity {
 
