@@ -9,6 +9,7 @@ import org.junit.jupiter.api.TestFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import com.lecture.IntegrationTest;
+import com.lecture.fixture.CourseRequestFixture;
 import com.lecture.fixture.SignUpRequestFixture;
 import com.lecture.member.service.dto.SignUpRequest;
 import io.restassured.RestAssured;
@@ -17,14 +18,6 @@ import io.restassured.http.ContentType;
 import static org.hamcrest.Matchers.is;
 
 public class CourseIntegrationTest extends IntegrationTest {
-
-    private static int signUp(SignUpRequest Teacher) {
-        return (int) RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(Teacher)
-                .when().post("/members")
-                .then().extract().body().jsonPath().get("id");
-    }
 
     @DisplayName("회원가입한 강사가 강좌를 등록한다.")
     @TestFactory
@@ -62,18 +55,10 @@ public class CourseIntegrationTest extends IntegrationTest {
         return Stream.of(
                 DynamicTest.dynamicTest("학생으로 회원가입한다", () -> memberId.set(signUp(SignUpRequestFixture.createStudent()))),
                 DynamicTest.dynamicTest("학생은 강좌를 등록할 수 없다", () -> {
-                    String courseRequest = """
-                            {
-                                "title": "너나위의 내집마련 기초반",
-                                "capacity": 10,
-                                "price": 200000
-                            }
-                            """;
-
                     RestAssured.given().log().all()
                             .contentType(ContentType.JSON)
                             .header(HttpHeaders.AUTHORIZATION, memberId)
-                            .body(courseRequest)
+                            .body(CourseRequestFixture.create())
                             .when().post("/courses")
                             .then().log().all()
                             .assertThat().statusCode(HttpStatus.FORBIDDEN.value())
@@ -86,41 +71,23 @@ public class CourseIntegrationTest extends IntegrationTest {
     @TestFactory
     Stream<DynamicTest> cannotRegisterCourseIfAlreadyExists() {
         AtomicLong memberId = new AtomicLong();
+        String title = "title";
         return Stream.of(
                 DynamicTest.dynamicTest("강사로 회원가입한다", () -> memberId.set(signUp(SignUpRequestFixture.createTeacher()))),
                 DynamicTest.dynamicTest("강사가 강좌를 등록한다", () -> {
-                    String courseRequest = """
-                            {
-                                "title": "너나위의 내집마련 기초반",
-                                "capacity": 10,
-                                "price": 200000
-                            }
-                            """;
-                    int expectedId = 1;
-
                     RestAssured.given().log().all()
                             .contentType(ContentType.JSON)
                             .header(HttpHeaders.AUTHORIZATION, memberId)
-                            .body(courseRequest)
+                            .body(CourseRequestFixture.create(title))
                             .when().post("/courses")
                             .then().log().all()
-                            .assertThat().statusCode(HttpStatus.CREATED.value())
-                            .header(HttpHeaders.LOCATION, "/courses/" + expectedId)
-                            .body("id", is(expectedId));
+                            .assertThat().statusCode(HttpStatus.CREATED.value());
                 }),
                 DynamicTest.dynamicTest("강사가 이미 등록한 강좌와 같은 이름으로 등록을 시도하면 실패한다", () -> {
-                    String courseRequest = """
-                            {
-                                "title": "너나위의 내집마련 기초반",
-                                "capacity": 10,
-                                "price": 200000
-                            }
-                            """;
-
                     RestAssured.given().log().all()
                             .contentType(ContentType.JSON)
                             .header(HttpHeaders.AUTHORIZATION, memberId)
-                            .body(courseRequest)
+                            .body(CourseRequestFixture.create(title))
                             .when().post("/courses")
                             .then().log().all()
                             .assertThat().statusCode(HttpStatus.BAD_REQUEST.value())
@@ -129,24 +96,23 @@ public class CourseIntegrationTest extends IntegrationTest {
         );
     }
 
+    private int signUp(SignUpRequest signUpRequest) {
+        return (int) RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(signUpRequest)
+                .when().post("/members")
+                .then().extract().body().jsonPath().get("id");
+    }
+
     @DisplayName("인증되지 않은 사용자는 강좌를 등록할 수 없다.")
     @Test
     void cannotRegisterIfUnknownUser() {
         // given
         long memberId = 0L;
-        String courseRequest = """
-                {
-                    "title": "너나위의 내집마련 기초반",
-                    "capacity": 10,
-                    "price": 200000
-                }
-                """;
-
-        // when & then
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, memberId)
-                .body(courseRequest)
+                .body(CourseRequestFixture.create())
                 .when().post("/courses")
                 .then().log().all()
                 .assertThat().statusCode(HttpStatus.UNAUTHORIZED.value())
