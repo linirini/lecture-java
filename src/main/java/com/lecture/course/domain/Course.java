@@ -24,7 +24,8 @@ public class Course extends BaseEntity {
     private Title title;
 
     @Column(nullable = false)
-    private Long capacity;
+    @Embedded
+    private Capacity capacity;
 
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal price;
