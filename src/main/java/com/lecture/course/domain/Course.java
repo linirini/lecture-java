@@ -2,6 +2,7 @@ package com.lecture.course.domain;
 
 import java.math.BigDecimal;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +20,8 @@ public class Course extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String title;
+    @Embedded
+    private Title title;
 
     @Column(nullable = false)
     private Long capacity;
