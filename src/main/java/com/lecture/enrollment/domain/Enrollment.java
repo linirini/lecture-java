@@ -7,7 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import com.config.domain.BaseEntity;
+import com.lecture.config.domain.BaseEntity;
 import com.lecture.course.domain.Course;
 import com.lecture.member.domain.Member;
 import lombok.AccessLevel;
