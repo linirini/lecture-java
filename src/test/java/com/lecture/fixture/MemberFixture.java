@@ -28,4 +28,14 @@ public class MemberFixture {
                 Role.TEACHER
         );
     }
+
+    public static Member createStudent() {
+        return new Member(
+                new Name("이름"),
+                new Email("user@email.com"),
+                new PhoneNumber("01012345678"),
+                new Password("password1"),
+                Role.STUDENT
+        );
+    }
 }

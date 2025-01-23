@@ -16,4 +16,8 @@ public enum Role {
                 .findAny()
                 .orElseThrow(() -> new LectureException(UNKNOWN_ROLE_MESSAGE));
     }
+
+    public boolean isStudent() {
+        return this.equals(STUDENT);
+    }
 }

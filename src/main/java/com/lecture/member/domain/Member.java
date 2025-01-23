@@ -53,4 +53,8 @@ public class Member extends BaseEntity {
     public Member(String name, String email, String phoneNumber, String password, String role) {
         this(new Name(name), new Email(email), new PhoneNumber(phoneNumber), new Password(password), Role.findByName(role));
     }
+
+    public boolean isStudent() {
+        return role.isStudent();
+    }
 }
