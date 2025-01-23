@@ -7,7 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import com.config.domain.BaseEntity;
+import com.lecture.config.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
