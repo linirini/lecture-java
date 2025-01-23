@@ -1,4 +1,4 @@
-package com.config.domain;
+package com.lecture.config.domain;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.EntityListeners;
