@@ -37,4 +37,15 @@ public class Course extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    public Course(Title title, Capacity capacity, Price price, Member member) {
+        this.title = title;
+        this.capacity = capacity;
+        this.price = price;
+        this.member = member;
+    }
+
+    public Course(String title, long capacity, long price, Member member) {
+        this(new Title(title), new Capacity(capacity), new Price(price), member);
+    }
 }
