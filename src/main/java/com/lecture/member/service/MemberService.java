@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private static final String DUPLICATED_EMAIL_MESSAGE = "이미 존재하는 이메일입니다. 다시 설정해주세요.";
+    private static final String DUPLICATED_PHONE_NUMBER_MESSAGE = "이미 존재하는 전화번호입니다. 다시 설정해주세요.";
+
     private final MemberRepository memberRepository;
 
     public SignUpResponse createMember(SignUpRequest signUpRequest) {
@@ -24,13 +27,13 @@ public class MemberService {
 
     private void validateIfDuplicatedEmail(Member member) {
         if (memberRepository.existsByEmail(member.getEmail())) {
-            throw new LectureException("이미 존재하는 이메일입니다. 다시 설정해주세요.");
+            throw new LectureException(DUPLICATED_EMAIL_MESSAGE);
         }
     }
 
     private void validateIfDuplicatedPhoneNumber(Member member) {
         if (memberRepository.existsByPhoneNumber(member.getPhoneNumber())) {
-            throw new LectureException("이미 존재하는 전화번호입니다. 다시 설정해주세요.");
+            throw new LectureException(DUPLICATED_PHONE_NUMBER_MESSAGE);
         }
     }
 }
