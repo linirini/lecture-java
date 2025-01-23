@@ -9,7 +9,17 @@ import com.lecture.member.domain.Role;
 
 public class MemberFixture {
 
-    public static Member create(Email email, PhoneNumber phoneNumber) {
+    public static Member createTeacher() {
+        return new Member(
+                new Name("이름"),
+                new Email("user@email.com"),
+                new PhoneNumber("01012345678"),
+                new Password("password1"),
+                Role.TEACHER
+        );
+    }
+
+    public static Member createTeacher(Email email, PhoneNumber phoneNumber) {
         return new Member(
                 new Name("이름"),
                 email,
