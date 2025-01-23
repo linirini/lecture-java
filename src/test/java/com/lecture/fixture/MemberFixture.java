@@ -9,11 +9,11 @@ import com.lecture.member.domain.Role;
 
 public class MemberFixture {
 
-    public static Member create(Email email) {
+    public static Member create(Email email, PhoneNumber phoneNumber) {
         return new Member(
                 new Name("이름"),
                 email,
-                new PhoneNumber("01012345678"),
+                phoneNumber,
                 new Password("password1"),
                 Role.TEACHER
         );
