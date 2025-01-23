@@ -33,7 +33,8 @@ public class Member extends BaseEntity {
     private PhoneNumber phoneNumber;
 
     @Column(nullable = false, length = 10)
-    private String password;
+    @Embedded
+    private Password password;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
