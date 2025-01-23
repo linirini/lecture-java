@@ -28,7 +28,7 @@ class MemberServiceTest extends ServiceSliceTest {
     @Test
     void createMember() {
         // given
-        SignUpRequest signUpRequest = SignUpRequestFixture.create();
+        SignUpRequest signUpRequest = SignUpRequestFixture.createStudent();
 
         //when
         SignUpResponse signUpResponse = memberService.createMember(signUpRequest);
