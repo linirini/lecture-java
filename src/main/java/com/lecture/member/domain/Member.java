@@ -39,4 +39,16 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Role role;
+
+    public Member(Name name, Email email, PhoneNumber phoneNumber, Password password, Role role) {
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.role = role;
+    }
+
+    public Member(String name, String email, String phoneNumber, String password, String role) {
+        this(new Name(name), new Email(email), new PhoneNumber(phoneNumber), new Password(password), Role.findByName(role));
+    }
 }
