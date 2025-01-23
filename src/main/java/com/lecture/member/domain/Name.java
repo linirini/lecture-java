@@ -12,8 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Name {
 
+    private static final int MIN_LENGTH = 1;
     private static final int MAX_LENGTH = 10;
-    private static final String INVALID_LENGTH_MESSAGE = String.format("이름은 1자 이상, %d자 이하로 설정해주세요.", MAX_LENGTH);
+    private static final String INVALID_LENGTH_MESSAGE = String.format("이름은 %d자 이상, %d자 이하로 설정해주세요.", MIN_LENGTH, MAX_LENGTH);
 
     private String name;
 
@@ -31,7 +32,7 @@ public class Name {
     }
 
     private void validate(String value) {
-        if (value.isEmpty() || value.length() > MAX_LENGTH) {
+        if (value.length() < MIN_LENGTH || value.length() > MAX_LENGTH) {
             throw new LectureException(INVALID_LENGTH_MESSAGE);
         }
     }
