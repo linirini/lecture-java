@@ -2,7 +2,6 @@ package com.lecture.course;
 
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,6 @@ import static org.hamcrest.Matchers.is;
 
 public class CourseIntegrationTest extends IntegrationTest {
 
-    @Disabled
     @DisplayName("회원가입한 강사가 강좌를 등록한다.")
     @TestFactory
     Stream<DynamicTest> registerCourse() {
@@ -49,7 +47,6 @@ public class CourseIntegrationTest extends IntegrationTest {
         );
     }
 
-    @Disabled
     @DisplayName("회원가입한 학생은 강좌를 등록할 수 없다.")
     @TestFactory
     Stream<DynamicTest> cannotRegisterCourseIfStudent() {
@@ -77,7 +74,6 @@ public class CourseIntegrationTest extends IntegrationTest {
         );
     }
 
-    @Disabled
     @DisplayName("강사는 등록했던 본인의 강좌와 동일한 강좌명으로 등록할 수 없다.")
     @TestFactory
     Stream<DynamicTest> cannotRegisterCourseIfAlreadyExists() {
@@ -133,7 +129,6 @@ public class CourseIntegrationTest extends IntegrationTest {
                 .then().extract().body().jsonPath().get("id");
     }
 
-    @Disabled
     @DisplayName("인증되지 않은 사용자는 강좌를 등록할 수 없다.")
     @Test
     void cannotRegisterIfUnknownUser() {
