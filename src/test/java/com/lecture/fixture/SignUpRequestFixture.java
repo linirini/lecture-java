@@ -8,8 +8,16 @@ public class SignUpRequestFixture {
         return new SignUpRequest("name", "user@email.com", "01012345678", "password1", "STUDENT");
     }
 
+    public static SignUpRequest createStudent(String email, String phoneNumber) {
+        return new SignUpRequest("name", email, phoneNumber, "password1", "STUDENT");
+    }
+
     public static SignUpRequest createTeacher() {
         return new SignUpRequest("name", "user@email.com", "01012345678", "password1", "TEACHER");
+    }
+
+    public static SignUpRequest createTeacher(String email, String phoneNumber) {
+        return new SignUpRequest("name", email, phoneNumber, "password1", "TEACHER");
     }
 
     public static SignUpRequest createWithEmail(String email) {
