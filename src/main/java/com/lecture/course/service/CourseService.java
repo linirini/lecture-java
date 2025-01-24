@@ -1,6 +1,9 @@
 package com.lecture.course.service;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.lecture.course.domain.Course;
 import com.lecture.course.repository.CourseRepository;
 import com.lecture.course.service.dto.CourseIdResponse;
@@ -43,6 +46,8 @@ public class CourseService {
     }
 
     public CourseResponses readAllCourses(CourseReadRequest courseReadRequest) {
-        return null;
+        Pageable pageable = courseReadRequest.toPageable();
+        Slice<Course> courses = courseRepository.findAllBy(pageable);
+        return CourseResponses.from(courses);
     }
 }
