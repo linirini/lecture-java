@@ -58,4 +58,13 @@ public class Course extends BaseEntity {
     public Course(String title, long capacity, long price, Member member) {
         this(new Title(title), new Capacity(capacity), new Price(price), member);
     }
+
+    public void enrolled() {
+        enrollCount = enrollCount + 1;
+        enrollRatio = getRatio();
+    }
+
+    private double getRatio() {
+        return Math.round((enrollCount.doubleValue() / capacity.getCapacity()) * 10000) / 100.0;
+    }
 }
