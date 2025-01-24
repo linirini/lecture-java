@@ -1,6 +1,7 @@
 package com.lecture.member.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.lecture.exception.LectureException;
 import com.lecture.member.domain.Member;
 import com.lecture.member.repository.MemberRepository;
@@ -17,6 +18,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Transactional
     public SignUpResponse createMember(SignUpRequest signUpRequest) {
         Member member = signUpRequest.toMember();
         validateIfDuplicatedEmail(member);

@@ -36,6 +36,12 @@ public class Course extends BaseEntity {
     @Embedded
     private Price price;
 
+    @Column(nullable = false)
+    private Long enrollCount;
+
+    @Column(nullable = false)
+    private Double enrollRatio;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -44,6 +50,8 @@ public class Course extends BaseEntity {
         this.title = title;
         this.capacity = capacity;
         this.price = price;
+        this.enrollCount = 0L;
+        this.enrollRatio = 0.0;
         this.member = member;
     }
 

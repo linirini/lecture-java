@@ -3,7 +3,9 @@ package com.lecture.course.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import com.lecture.course.service.dto.CourseIdResponse;
+import com.lecture.course.service.dto.CourseReadRequest;
 import com.lecture.course.service.dto.CourseRequest;
+import com.lecture.course.service.dto.CourseResponses;
 import com.lecture.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,4 +38,8 @@ public interface CourseControllerDocs {
             @Parameter(required = true) @Valid CourseRequest courseRequest,
             @Parameter(hidden = true) Member member
     );
+
+    @Operation(summary = "강의 목록 조회", description = "주어진 정렬 조건과 페이징에 부합하는 강의 목록을 조회합니다.")
+    @ApiResponse(description = "강의 조회 성공", responseCode = "200")
+    ResponseEntity<CourseResponses> readAllCourses(CourseReadRequest courseReadRequest);
 }
