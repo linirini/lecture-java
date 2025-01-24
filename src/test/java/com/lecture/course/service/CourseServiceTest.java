@@ -118,7 +118,7 @@ class CourseServiceTest extends ServiceSliceTest {
     @Sql("/course.sql")
     void readAllCoursesSorted(OrderColumn column, Long... courseIds) {
         // given
-        CourseReadRequest courseReadRequest = new CourseReadRequest(1, 5, column.name(), "DESC");
+        CourseReadRequest courseReadRequest = new CourseReadRequest(1, 5, "DESC", column.name());
 
         // when
         CourseResponses courseResponses = courseService.readAllCourses(courseReadRequest);

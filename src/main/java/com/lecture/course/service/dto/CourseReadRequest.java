@@ -9,8 +9,8 @@ import com.lecture.course.service.OrderColumn;
 public record CourseReadRequest(
         Integer pageNo,
         Integer pageSize,
-        String orderColumn,
-        String orderType
+        String orderType,
+        String orderColumn
 ) {
 
     private static final int DEFAULT_PAGE_NO = 0;
