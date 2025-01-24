@@ -17,7 +17,7 @@ public record CourseResponse(
                 course.getTitle().getTitle(),
                 course.getPrice().getPrice(),
                 course.getMember().getName().getName(),
-                0,
+                course.getEnrollCount(),
                 course.getCapacity().getCapacity()
         );
     }
