@@ -28,4 +28,8 @@ public class Capacity {
             throw new LectureException(INVALID_CAPACITY_MESSAGE);
         }
     }
+
+    public boolean isNotMoreThan(long count) {
+        return capacity <= count;
+    }
 }

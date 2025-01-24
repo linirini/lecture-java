@@ -40,4 +40,31 @@ class CourseTest {
                 () -> assertThat(course.getEnrollRatio()).isEqualTo(12.5)
         );
     }
+
+    @DisplayName("강좌 최대 수강 인원이 꽉 찼으면 참을 반환한다.")
+    @Test
+    void isFull() {
+        // given
+        Course course = CourseFixture.create(1, MemberFixture.createTeacher());
+        course.enrolled();
+
+        // when
+        boolean result = course.isFull();
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @DisplayName("강좌 최대 수강 인원이 남았으면 거짓을 반환한다.")
+    @Test
+    void isNotFull() {
+        // given
+        Course course = CourseFixture.create(1, MemberFixture.createTeacher());
+
+        // when
+        boolean result = course.isFull();
+
+        // then
+        assertThat(result).isFalse();
+    }
 }

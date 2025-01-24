@@ -59,6 +59,10 @@ public class Course extends BaseEntity {
         this(new Title(title), new Capacity(capacity), new Price(price), member);
     }
 
+    public boolean isFull() {
+        return capacity.isNotMoreThan(enrollCount);
+    }
+
     public void enrolled() {
         enrollCount = enrollCount + 1;
         enrollRatio = getRatio();
