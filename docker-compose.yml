@@ -1,20 +1,26 @@
-version: "3.9"
 services:
   db:
-    image: oscarh/hibernate:2.2.0 # H2 이미지
-    container_name: h2db
-    restart: always
+    container_name: h2
+    image: oscarfonts/h2:latest
     ports:
-      - "8082:8082"  # H2 Console
+      - 9000:1521 # TCP 포트 : 데이터베이스 연결 포트
+      - 8081:81 # HTTP 포트 : 웹콘솔 연결 포트
     environment:
-      H2_OPTIONS: '-tcpAllowOthers -tcpPort 9092' # H2 TCP 옵션
+      H2_OPTIONS: -ifNotExists
     volumes:
-      - ./db/h2/data:/data
-    entrypoint: ["java", "-jar", "/app/h2.jar", "-tcp", "-tcpAllowOthers", "-web", "-webAllowOthers", "-webPort", "8082"]
+      - ./h2/:/opt/h2-data
+    restart: always
 
   app:
-    image: your-spring-application-image
+    container_name: lecture_app
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2:1521/demo
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: 123
     depends_on:
       - db
