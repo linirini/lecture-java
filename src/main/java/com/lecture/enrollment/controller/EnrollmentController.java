@@ -1,5 +1,6 @@
 package com.lecture.enrollment.controller;
 
+import java.util.concurrent.CompletableFuture;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class EnrollmentController {
 
     @PostMapping
     public ResponseEntity<EnrollmentResponses> enroll(@Valid @RequestBody EnrollmentRequest enrollmentRequest, @LoginMember Member member){
-        EnrollmentResponses enrollmentResponses = enrollmentService.enroll(enrollmentRequest, member);
-        return ResponseEntity.ok(enrollmentResponses);
+        CompletableFuture<EnrollmentResponses> futureResponses = enrollmentService.enroll(enrollmentRequest, member);
+        return ResponseEntity.ok(futureResponses.join());
     }
 }
