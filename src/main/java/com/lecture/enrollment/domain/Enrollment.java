@@ -28,4 +28,9 @@ public class Enrollment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
+
+    public Enrollment(Member member, Course course) {
+        this.member = member;
+        this.course = course;
+    }
 }

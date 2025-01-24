@@ -6,6 +6,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lecture.course.service.CourseService;
+import com.lecture.enrollment.service.EnrollmentService;
 import com.lecture.member.repository.MemberRepository;
 import com.lecture.member.service.MemberService;
 
@@ -22,4 +23,6 @@ public abstract class ControllerTest {
     protected MemberRepository memberRepository;
     @MockBean
     protected CourseService courseService;
+    @MockBean
+    protected EnrollmentService enrollmentService;
 }
