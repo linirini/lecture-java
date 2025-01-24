@@ -1,0 +1,26 @@
+services:
+  db:
+    container_name: h2
+    image: oscarfonts/h2:latest
+    ports:
+      - 9000:1521 # TCP 포트 : 데이터베이스 연결 포트
+      - 8081:81 # HTTP 포트 : 웹콘솔 연결 포트
+    environment:
+      H2_OPTIONS: -ifNotExists
+    volumes:
+      - ./h2/:/opt/h2-data
+    restart: always
+
+  app:
+    container_name: lecture_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2:1521/demo
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: 123
+    depends_on:
+      - db
