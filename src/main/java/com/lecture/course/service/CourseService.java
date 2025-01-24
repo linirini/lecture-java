@@ -13,6 +13,7 @@ import com.lecture.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CourseService {
 
@@ -20,6 +21,7 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
 
+    @Transactional
     public CourseIdResponse createCourse(CourseRequest courseRequest, Member member) {
         validateRole(member);
         Course course = courseRequest.toCourse(member);
