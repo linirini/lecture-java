@@ -23,7 +23,7 @@ public class EnrollmentController {
 
     @PostMapping
     public ResponseEntity<EnrollmentResponses> enroll(@Valid @RequestBody EnrollmentRequest enrollmentRequest, @LoginMember Member member){
-        CompletableFuture<EnrollmentResponses> futureResponses = enrollmentService.enroll(enrollmentRequest, member);
+        CompletableFuture<EnrollmentResponses> futureResponses = enrollmentService.enrollAll(enrollmentRequest, member);
         return ResponseEntity.ok(futureResponses.join());
     }
 }
