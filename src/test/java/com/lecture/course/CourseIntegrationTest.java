@@ -2,6 +2,7 @@ package com.lecture.course;
 
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import com.lecture.member.service.dto.SignUpRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
+import static org.hamcrest.Matchers.equalToCompressingWhiteSpace;
 import static org.hamcrest.Matchers.is;
 
 public class CourseIntegrationTest extends IntegrationTest {
@@ -75,13 +77,7 @@ public class CourseIntegrationTest extends IntegrationTest {
         return Stream.of(
                 DynamicTest.dynamicTest("강사로 회원가입한다", () -> memberId.set(signUp(SignUpRequestFixture.createTeacher()))),
                 DynamicTest.dynamicTest("강사가 강좌를 등록한다", () -> {
-                    RestAssured.given().log().all()
-                            .contentType(ContentType.JSON)
-                            .header(HttpHeaders.AUTHORIZATION, memberId)
-                            .body(CourseRequestFixture.create(title))
-                            .when().post("/courses")
-                            .then().log().all()
-                            .assertThat().statusCode(HttpStatus.CREATED.value());
+                    registerCourse(memberId, title);
                 }),
                 DynamicTest.dynamicTest("강사가 이미 등록한 강좌와 같은 이름으로 등록을 시도하면 실패한다", () -> {
                     RestAssured.given().log().all()
@@ -117,5 +113,84 @@ public class CourseIntegrationTest extends IntegrationTest {
                 .then().log().all()
                 .assertThat().statusCode(HttpStatus.UNAUTHORIZED.value())
                 .body("message", is("인증되지 않은 사용자입니다."));
+    }
+
+    @Disabled
+    @DisplayName("page와 sort를 지정하지 않으면 최근 등록 순 첫 페이지 강의 목록을 조회한다.")
+    @TestFactory
+    Stream<DynamicTest> readCoursesByDefault() {
+        AtomicLong memberId = new AtomicLong();
+        return Stream.of(
+                DynamicTest.dynamicTest("강사로 회원가입한다", () -> memberId.set(signUp(SignUpRequestFixture.createTeacher()))),
+                DynamicTest.dynamicTest("강사가 강좌를 2개 등록한다", () -> {
+                    registerCourse(memberId, "title");
+                    registerCourse(memberId, "title2");
+                }),
+                DynamicTest.dynamicTest("비회원이 개설된 모든 강의를 조회한다.", () -> {
+                    String expectedResponse = """
+                            {
+                                "courses": [
+                                    {
+                                        "id": 2,
+                                        "title": "title1",
+                                        "price": 200000,
+                                        "teacher": "name",
+                                        "currentEnrollment": 0,
+                                        "capacity": 10
+                                    },
+                                    {
+                                        "id": 1,
+                                        "title": "title2",
+                                        "price": 200000,
+                                        "teacher": "name",
+                                        "currentEnrollment": 0,
+                                        "capacity": 10
+                                    }
+                                ]
+                            }
+                            """;
+                    RestAssured.given().log().all()
+                            .contentType(ContentType.JSON)
+                            .when().get("/courses")
+                            .then().log().all()
+                            .assertThat().statusCode(HttpStatus.OK.value())
+                            .body(equalToCompressingWhiteSpace(expectedResponse));
+                })
+        );
+    }
+
+    @Disabled
+    @DisplayName("page를 0이하로 설정하면 첫 페이지의 강의 목록이 조회된다.")
+    @TestFactory
+    Stream<DynamicTest> readCourses() {
+        AtomicLong memberId = new AtomicLong();
+        return Stream.of(
+                DynamicTest.dynamicTest("강사로 회원가입한다", () -> memberId.set(signUp(SignUpRequestFixture.createTeacher()))),
+                DynamicTest.dynamicTest("강사가 강좌를 2개 등록한다", () -> {
+                    registerCourse(memberId, "title");
+                    registerCourse(memberId, "title2");
+                }),
+                DynamicTest.dynamicTest("비회원이 개설된 모든 강의를 조회한다.", () -> {
+                    RestAssured.given().log().all()
+                            .contentType(ContentType.JSON)
+                            .pathParam("page", 0)
+                            .when().get("/courses")
+                            .then().log().all()
+                            .assertThat().statusCode(HttpStatus.OK.value())
+                            .body("size()", is(2))
+                            .body("[0].id", is(2))
+                            .body("[1].id", is(1));
+                })
+        );
+    }
+
+    private static void registerCourse(AtomicLong memberId, String title) {
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, memberId)
+                .body(CourseRequestFixture.create(title))
+                .when().post("/courses")
+                .then().log().all()
+                .assertThat().statusCode(HttpStatus.CREATED.value());
     }
 }
