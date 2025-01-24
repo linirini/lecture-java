@@ -8,7 +8,7 @@ public record CourseIdResponse(
         @Schema(example = "1")
         long id
 ) {
-    public CourseIdResponse(Course course){
+    public CourseIdResponse(Course course) {
         this(course.getId());
     }
 }

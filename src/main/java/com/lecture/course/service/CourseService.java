@@ -1,16 +1,22 @@
 package com.lecture.course.service;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.lecture.course.domain.Course;
 import com.lecture.course.repository.CourseRepository;
 import com.lecture.course.service.dto.CourseIdResponse;
+import com.lecture.course.service.dto.CourseReadRequest;
 import com.lecture.course.service.dto.CourseRequest;
+import com.lecture.course.service.dto.CourseResponses;
 import com.lecture.exception.ForbiddenException;
 import com.lecture.exception.LectureException;
 import com.lecture.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CourseService {
 
@@ -18,6 +24,7 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
 
+    @Transactional
     public CourseIdResponse createCourse(CourseRequest courseRequest, Member member) {
         validateRole(member);
         Course course = courseRequest.toCourse(member);
@@ -33,8 +40,14 @@ public class CourseService {
     }
 
     private void validateDuplicated(Course course) {
-        if(courseRepository.existsByMemberAndTitle(course.getMember(), course.getTitle())){
+        if (courseRepository.existsByMemberAndTitle(course.getMember(), course.getTitle())) {
             throw new LectureException(DUPLICATED_TITLE_MESSAGE);
         }
+    }
+
+    public CourseResponses readAllCourses(CourseReadRequest courseReadRequest) {
+        Pageable pageable = courseReadRequest.toPageable();
+        Slice<Course> courses = courseRepository.findAllBy(pageable);
+        return CourseResponses.from(courses);
     }
 }
