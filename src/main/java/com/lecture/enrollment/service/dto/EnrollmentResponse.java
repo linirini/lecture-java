@@ -1,8 +1,14 @@
 package com.lecture.enrollment.service.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "개별 수강 신청 성공/실패 여부 응답 형식입니다.")
 public record EnrollmentResponse(
+        @Schema(example = "1")
         long courseId,
+        @Schema(example = "SUCCESS")
         String status,
+        @Schema(example = "수강 신청에 성공하였습니다.")
         String message
 ) {
 
