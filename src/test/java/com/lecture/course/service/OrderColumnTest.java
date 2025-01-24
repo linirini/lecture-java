@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderColumnTest {
@@ -12,9 +13,9 @@ class OrderColumnTest {
     @Test
     void findByCondition() {
         // given & when
-        String recentColumn = OrderColumn.findByCondition("RECENT");
-        String mostColumn = OrderColumn.findByCondition("MOST");
-        String highestColumn = OrderColumn.findByCondition("HIGHEST");
+        String recentColumn = OrderColumn.findByCondition("RECENT").getColumn();
+        String mostColumn = OrderColumn.findByCondition("MOST").getColumn();
+        String highestColumn = OrderColumn.findByCondition("HIGHEST").getColumn();
 
         // then
         assertAll(
@@ -24,13 +25,11 @@ class OrderColumnTest {
         );
     }
 
-    @DisplayName("존재하지 않는 조건을 입력하면 기본값(RECENT)의 컬럼을 반환한다.")
+    @DisplayName("존재하지 않는 조건을 입력하면 예외가 발생한다.")
     @Test
     void findDefaultByUnknownCondition() {
-        // when
-        String unknownColumn = OrderColumn.findByCondition("UNKNOWN");
-
-        // then
-        assertThat(unknownColumn).isEqualTo("createdAt");
+        assertThatThrownBy(() -> OrderColumn.findByCondition("UNKNOWN"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("존재하지 않는 정렬 조건입니다.");
     }
 }

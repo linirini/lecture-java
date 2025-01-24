@@ -2,22 +2,24 @@ package com.lecture.course.service;
 
 import java.util.Arrays;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum OrderColumn {
 
     RECENT("createdAt"),
     MOST("enrollCount"),
-    HIGHEST("enrollRatio")
+    HIGHEST("enrollRatio"),
     ;
 
+    private static final String UNKNOWN_ORDER_MESSAGE = "존재하지 않는 정렬 조건입니다.";
     private final String column;
 
-    public static String findByCondition(String condition) {
-        OrderColumn orderColumn = Arrays.stream(values())
+    public static OrderColumn findByCondition(String condition) {
+        return Arrays.stream(values())
                 .filter(value -> value.name().equalsIgnoreCase(condition))
                 .findFirst()
-                .orElse(RECENT);
-        return orderColumn.column;
+                .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_ORDER_MESSAGE));
     }
 }
