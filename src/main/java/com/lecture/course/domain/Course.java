@@ -39,7 +39,7 @@ public class Course extends BaseEntity {
     @Column(nullable = false)
     private Long enrollCount;
 
-    @Column(nullable = false, precision = 5, scale = 2)
+    @Column(nullable = false)
     private Double enrollRatio;
 
     @ManyToOne(fetch = FetchType.LAZY)
