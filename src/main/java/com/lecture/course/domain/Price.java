@@ -29,4 +29,8 @@ public class Price {
             throw new LectureException(INVALID_PRICE_MESSAGE);
         }
     }
+
+    public long getPrice() {
+        return price.longValue();
+    }
 }
