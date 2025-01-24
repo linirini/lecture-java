@@ -4,7 +4,9 @@ import org.springframework.stereotype.Service;
 import com.lecture.course.domain.Course;
 import com.lecture.course.repository.CourseRepository;
 import com.lecture.course.service.dto.CourseIdResponse;
+import com.lecture.course.service.dto.CourseReadRequest;
 import com.lecture.course.service.dto.CourseRequest;
+import com.lecture.course.service.dto.CourseResponses;
 import com.lecture.exception.ForbiddenException;
 import com.lecture.exception.LectureException;
 import com.lecture.member.domain.Member;
@@ -36,5 +38,9 @@ public class CourseService {
         if (courseRepository.existsByMemberAndTitle(course.getMember(), course.getTitle())) {
             throw new LectureException(DUPLICATED_TITLE_MESSAGE);
         }
+    }
+
+    public CourseResponses readAllCourses(CourseReadRequest courseReadRequest) {
+        return null;
     }
 }
