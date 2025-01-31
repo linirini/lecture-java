@@ -6,7 +6,6 @@ import com.lecture.course.domain.Course;
 import com.lecture.course.repository.CourseRepository;
 import com.lecture.enrollment.domain.Enrollment;
 import com.lecture.enrollment.repository.EnrollmentRepository;
-import com.lecture.enrollment.service.dto.EnrollmentResponse;
 import com.lecture.exception.LectureException;
 import com.lecture.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +22,12 @@ public class EnrollmentService {
     private final CourseRepository courseRepository;
 
     @Transactional
-    public EnrollmentResponse enroll(Member member, Long courseId) {
-        try {
-            Course course = getCourseById(courseId);
-            validateIfCapacityExceeded(course);
-            validateIfAlreadyEnrolled(course, member);
-            enrollmentRepository.save(new Enrollment(member, course));
-            course.enrolled();
-            return EnrollmentResponse.succeed(courseId);
-        } catch (Exception e) {
-            return EnrollmentResponse.fail(courseId, e.getMessage());
-        }
+    public void enroll(Member member, Long courseId) {
+        Course course = getCourseById(courseId);
+        validateIfCapacityExceeded(course);
+        validateIfAlreadyEnrolled(course, member);
+        enrollmentRepository.save(new Enrollment(member, course));
+        course.enrolled();
     }
 
     private Course getCourseById(Long courseId) {
@@ -48,7 +42,7 @@ public class EnrollmentService {
     }
 
     private void validateIfAlreadyEnrolled(Course course, Member member) {
-        if (!enrollmentRepository.existsByMemberIdAndCourseId(member.getId(), course.getId())) {
+        if (enrollmentRepository.existsByMemberIdAndCourseId(member.getId(), course.getId())) {
             throw new LectureException(ALREADY_ENROLLED_MESSAGE);
         }
     }
