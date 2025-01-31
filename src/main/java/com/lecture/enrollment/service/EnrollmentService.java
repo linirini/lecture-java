@@ -63,7 +63,7 @@ public class EnrollmentService {
     }
 
     private void validateIfAlreadyEnrolled(Course course, Member member) {
-        if (!enrollmentRepository.existsByMemberIdAndCourseId(member.getId(), course.getId())) {
+        if (enrollmentRepository.existsByMemberIdAndCourseId(member.getId(), course.getId())) {
             throw new LectureException(ALREADY_ENROLLED_MESSAGE);
         }
     }
