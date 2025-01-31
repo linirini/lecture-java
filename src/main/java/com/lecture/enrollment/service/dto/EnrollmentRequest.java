@@ -1,7 +1,7 @@
 package com.lecture.enrollment.service.dto;
 
 import java.util.List;
-import jakarta.validation.constraints.NotNull;
+import java.util.Objects;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "수강 신청 요청 형식입니다.")
@@ -11,10 +11,10 @@ public record EnrollmentRequest(
         List<Long> courseIds
 ) {
 
-    @Override
-    public List<Long> courseIds() {
-        return courseIds.stream()
-                .distinct()
-                .toList();
+    public EnrollmentRequest {
+        if (Objects.isNull(courseIds)) {
+            courseIds = List.of();
+        }
+        courseIds = courseIds.stream().distinct().toList();
     }
 }
