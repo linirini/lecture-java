@@ -9,7 +9,7 @@ git clone https://github.com/linirini/lecture-java.git
 docker-compose -p lecture up -d
 ```
 
-# Docker 정지하기
+### Docker 정지하기
 ```
 docker-compose -p lecture down
 ```

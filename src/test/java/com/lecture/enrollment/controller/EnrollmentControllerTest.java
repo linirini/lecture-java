@@ -1,5 +1,6 @@
 package com.lecture.enrollment.controller;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,11 +20,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class EnrollmentControllerTest extends ControllerTest {
 
-    @DisplayName("필수 입력값을 누락하면 회원가입에 실패한다.")
+    @DisplayName("필수 입력값을 누락하면 수강 신청에 실패한다.")
     @Test
     void cannotEnrollIfIdsNull() throws Exception {
         // given
-        EnrollmentRequest enrollmentRequest = new EnrollmentRequest(null);
+        EnrollmentRequest enrollmentRequest = new EnrollmentRequest(List.of());
         ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.BAD_REQUEST.toString(), "강좌 정보를 입력해주세요.");
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(MemberFixture.createTeacher()));
 

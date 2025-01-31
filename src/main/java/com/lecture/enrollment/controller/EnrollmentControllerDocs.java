@@ -1,9 +1,7 @@
 package com.lecture.enrollment.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 import com.lecture.enrollment.service.dto.EnrollmentRequest;
 import com.lecture.enrollment.service.dto.EnrollmentResponses;
 import com.lecture.member.domain.Member;
@@ -32,7 +30,8 @@ public interface EnrollmentControllerDocs {
                     """,
                     responseCode = "400")
     })
-    ResponseEntity<EnrollmentResponses> enroll(@Valid @Parameter(required = true) EnrollmentRequest enrollmentRequest,
-                                               @Parameter(hidden = true) Member member
+    ResponseEntity<EnrollmentResponses> enroll(
+            @Parameter(required = true) @Valid EnrollmentRequest enrollmentRequest,
+            @Parameter(hidden = true) Member member
     );
 }

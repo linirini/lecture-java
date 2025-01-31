@@ -2,7 +2,6 @@ package com.lecture.enrollment;
 
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -20,7 +19,6 @@ import static org.hamcrest.Matchers.is;
 
 class EnrollmentIntegrationTest extends IntegrationTest {
 
-    @Disabled
     @DisplayName("학생이 3개의 강의에 수강신청을 시도합니다.")
     @TestFactory
     Stream<DynamicTest> enroll() {
@@ -37,7 +35,7 @@ class EnrollmentIntegrationTest extends IntegrationTest {
                         studentId.set(signUp(SignUpRequestFixture.createStudent("learn@email.com", "01087654321")))
                 ),
                 DynamicTest.dynamicTest("강사가 3개의 강의(강의1, 강의2, 강의3)를 개설합니다.", () -> {
-                    course1Id.set(registerCourse(teacherId, "강의1", 1));
+                    course1Id.set(registerCourse(teacherId, "강의1", 2));
                     course2Id.set(registerCourse(teacherId, "강의2", 1));
                     course3Id.set(registerCourse(teacherId, "강의3", 1));
                 }),
@@ -51,14 +49,14 @@ class EnrollmentIntegrationTest extends IntegrationTest {
                                 .when().post("/enrollment")
                                 .then().log().all()
                                 .assertThat().statusCode(HttpStatus.OK.value())
-                                .body("size()", is(3))
-                                .body("enrollments[0].id", is(1))
+                                .body("enrollments.size()", is(3))
+                                .body("enrollments[0].courseId", is(1))
                                 .body("enrollments[0].status", is("FAILURE"))
                                 .body("enrollments[0].message", is("이미 수강 신청이 완료된 강좌입니다."))
-                                .body("enrollments[1].id", is(2))
+                                .body("enrollments[1].courseId", is(2))
                                 .body("enrollments[1].status", is("FAILURE"))
                                 .body("enrollments[1].message", is("이미 최대 수강 가능 인원을 초과했습니다."))
-                                .body("enrollments[2].id", is(3))
+                                .body("enrollments[2].courseId", is(3))
                                 .body("enrollments[2].status", is("SUCCESS"))
                                 .body("enrollments[2].message", is("수강신청이 완료되었습니다."))
                 )
@@ -77,7 +75,7 @@ class EnrollmentIntegrationTest extends IntegrationTest {
         return (int) RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, memberId)
-                .body(CourseRequestFixture.create(title,capacity))
+                .body(CourseRequestFixture.create(title, capacity))
                 .when().post("/courses")
                 .then().extract().body().jsonPath().get("id");
     }
