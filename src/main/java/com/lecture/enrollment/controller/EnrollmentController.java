@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/enrollment")
 @RequiredArgsConstructor
-public class EnrollmentController {
+public class EnrollmentController implements EnrollmentControllerDocs{
 
     private final EnrollmentFacade enrollmentFacade;
 
