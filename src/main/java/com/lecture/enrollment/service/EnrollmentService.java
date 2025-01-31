@@ -1,12 +1,18 @@
 package com.lecture.enrollment.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.lecture.course.domain.Course;
 import com.lecture.course.repository.CourseRepository;
 import com.lecture.enrollment.domain.Enrollment;
 import com.lecture.enrollment.repository.EnrollmentRepository;
+import com.lecture.enrollment.service.dto.EnrollmentRequest;
 import com.lecture.enrollment.service.dto.EnrollmentResponse;
+import com.lecture.enrollment.service.dto.EnrollmentResponses;
 import com.lecture.exception.LectureException;
 import com.lecture.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +28,23 @@ public class EnrollmentService {
     private final EnrollmentRepository enrollmentRepository;
     private final CourseRepository courseRepository;
 
+    @Async
     @Transactional
-    public EnrollmentResponse enroll(Member member, Long courseId) {
+    public CompletableFuture<EnrollmentResponses> enrollAll(EnrollmentRequest enrollmentRequest, Member member) {
+        List<EnrollmentResponse> enrollmentResponses = new ArrayList<>();
+        for (Long courseId : enrollmentRequest.courseIds()) {
+            EnrollmentResponse enrollmentResponse = enrollAll(member, courseId);
+            enrollmentResponses.add(enrollmentResponse);
+        }
+        return CompletableFuture.completedFuture(new EnrollmentResponses(enrollmentResponses));
+    }
+
+    private EnrollmentResponse enrollAll(Member member, Long courseId) {
         try {
             Course course = getCourseById(courseId);
             validateIfCapacityExceeded(course);
             validateIfAlreadyEnrolled(course, member);
             enrollmentRepository.save(new Enrollment(member, course));
-            course.enrolled();
             return EnrollmentResponse.succeed(courseId);
         } catch (Exception e) {
             return EnrollmentResponse.fail(courseId, e.getMessage());
