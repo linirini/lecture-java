@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.lecture.config.auth.LoginMember;
-import com.lecture.enrollment.service.EnrollmentService;
+import com.lecture.enrollment.service.EnrollmentFacade;
 import com.lecture.enrollment.service.dto.EnrollmentRequest;
 import com.lecture.enrollment.service.dto.EnrollmentResponses;
 import com.lecture.member.domain.Member;
@@ -19,11 +19,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EnrollmentController {
 
-    private final EnrollmentService enrollmentService;
+    private final EnrollmentFacade enrollmentFacade;
 
     @PostMapping
     public ResponseEntity<EnrollmentResponses> enroll(@Valid @RequestBody EnrollmentRequest enrollmentRequest, @LoginMember Member member) {
-        CompletableFuture<EnrollmentResponses> futureResponses = enrollmentService.enrollAll(enrollmentRequest, member);
+        CompletableFuture<EnrollmentResponses> futureResponses = enrollmentFacade.enrollAll(enrollmentRequest, member);
         return ResponseEntity.ok(futureResponses.join());
     }
 }
