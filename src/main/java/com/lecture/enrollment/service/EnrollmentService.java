@@ -2,7 +2,6 @@ package com.lecture.enrollment.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import com.lecture.course.domain.Course;
 import com.lecture.course.repository.CourseRepository;
 import com.lecture.enrollment.domain.Enrollment;
@@ -10,10 +9,8 @@ import com.lecture.enrollment.repository.EnrollmentRepository;
 import com.lecture.exception.LectureException;
 import com.lecture.member.domain.Member;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class EnrollmentService {
 
@@ -26,14 +23,11 @@ public class EnrollmentService {
 
     @Transactional
     public void enroll(Member member, Long courseId) {
-        log.info("Executing enroll() in Thread: {}", Thread.currentThread().getName());
-        log.info("Transaction active in {}(): {}", "enroll", TransactionSynchronizationManager.isActualTransactionActive());
         Course course = getCourseById(courseId);
         validateIfCapacityExceeded(course);
         validateIfAlreadyEnrolled(course, member);
         enrollmentRepository.save(new Enrollment(member, course));
         course.enrolled();
-        log.info("Completed enroll() in Thread: {}", Thread.currentThread().getName());
     }
 
     private Course getCourseById(Long courseId) {
