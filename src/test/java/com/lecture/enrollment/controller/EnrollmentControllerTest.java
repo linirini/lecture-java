@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class EnrollmentControllerTest extends ControllerTest {
 
-    @DisplayName("필수 입력값을 누락하면 회원가입에 실패한다.")
+    @DisplayName("필수 입력값을 누락하면 수강 신청에 실패한다.")
     @Test
     void cannotEnrollIfIdsNull() throws Exception {
         // given
