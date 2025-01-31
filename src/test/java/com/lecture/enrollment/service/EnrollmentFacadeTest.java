@@ -52,4 +52,39 @@ class EnrollmentFacadeTest extends ServiceSliceTest {
                 () -> assertThat(afterCourse2.getEnrollRatio()).isEqualTo(100)
         );
     }
+
+    @DisplayName("두 개의 강좌 중 하나가 실패하면, 성공한 강좌만 적용되고 실패한 강좌는 롤백된다.")
+    @Test
+    void enrollMultipleCoursesWithOneFailure() {
+        // given
+        Member member = memberRepository.save(MemberFixture.createTeacher());
+        Course successfulCourse = courseRepository.save(CourseFixture.create(1, member));
+        Course failedCourse = courseRepository.save(CourseFixture.create(2, member));
+        EnrollmentRequest enrollmentRequest = new EnrollmentRequest(List.of(failedCourse.getId()));
+        enrollmentFacade.enrollAll(enrollmentRequest, member).join();
+
+        EnrollmentRequest enrollmentRequestWithAlreadyEnrolled = new EnrollmentRequest(List.of(successfulCourse.getId(), failedCourse.getId()));
+
+        // when
+        EnrollmentResponses responses = enrollmentFacade.enrollAll(enrollmentRequestWithAlreadyEnrolled, member).join();
+
+        // then
+        Course afterSuccessfulCourse = courseRepository.findById(successfulCourse.getId()).get();
+        Course afterFailedCourse = courseRepository.findById(failedCourse.getId()).get();
+
+        assertAll(
+                () -> assertThat(responses.enrollments()).hasSize(2),
+                () -> assertThat(responses.enrollments().get(0).status()).isEqualTo("SUCCESS"),
+                () -> assertThat(responses.enrollments().get(1).status()).isEqualTo("FAILURE"),
+                () -> assertThat(responses.enrollments().get(1).message()).isEqualTo("이미 수강 신청이 완료된 강좌입니다."),
+
+                // 성공한 강좌 검증
+                () -> assertThat(afterSuccessfulCourse.getEnrollCount()).isEqualTo(1),
+                () -> assertThat(afterSuccessfulCourse.getEnrollRatio()).isEqualTo(100),
+
+                // 실패한 강좌 검증
+                () -> assertThat(afterFailedCourse.getEnrollCount()).isEqualTo(1),
+                () -> assertThat(afterFailedCourse.getEnrollRatio()).isEqualTo(50)
+        );
+    }
 }
