@@ -48,8 +48,7 @@ public class EnrollmentFacade {
             enrollmentService.enroll(member, courseId);
             return EnrollmentResponse.succeed(courseId);
         } catch (Exception e) {
-            log.error("Enrollment failed for course {} Reason: {}",
-                    courseId, e.getMessage());
+            log.error("Enrollment failed for course {} Reason: {}", courseId, e.getMessage());
             return EnrollmentResponse.fail(courseId, e.getMessage());
         }
     }

@@ -1,5 +1,6 @@
 package com.lecture.enrollment.controller;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ class EnrollmentControllerTest extends ControllerTest {
     @Test
     void cannotEnrollIfIdsNull() throws Exception {
         // given
-        EnrollmentRequest enrollmentRequest = new EnrollmentRequest(null);
+        EnrollmentRequest enrollmentRequest = new EnrollmentRequest(List.of());
         ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.BAD_REQUEST.toString(), "강좌 정보를 입력해주세요.");
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(MemberFixture.createTeacher()));
 
